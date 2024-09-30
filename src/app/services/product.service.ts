@@ -62,7 +62,6 @@ export class ProductService {
     const searchUrl = `${this.baseUrl}/search/findProductByProductNameContaining?productName=${theKeyword}`
       +`&page=${thePage}&size=${thePageSize}`;
     //                      make the call to api
-    console.log(`aAAAAA`+searchUrl)
     return this.httpClient.get<GetResponseProduct>(searchUrl);
   }
 

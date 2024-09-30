@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {ProductService} from "../../services/product.service";
 import {Product} from "../../common/product";
 import {ActivatedRoute} from "@angular/router";
+import {CartService} from "../../services/cart.service";
+import {CartItem} from "../../common/cart-item";
 
 @Component({
   selector: 'app-product-list',
@@ -22,6 +24,7 @@ export class ProductListComponent {
 
   //inject product service
   constructor(private productService: ProductService,
+              private cartService: CartService,
               private route : ActivatedRoute,) {}
 
   ngOnInit(): void {
@@ -79,8 +82,6 @@ export class ProductListComponent {
       this.currentCategoryId).subscribe(this.processResult());
   }
 
-  //protected readonly length = length;
-
   processResult() {
     return (data:any)=>{
       this.products = data._embedded.products;
@@ -88,5 +89,13 @@ export class ProductListComponent {
       this.thePageSize = data.page.size;
       this.theTotalElements = data.page.totalElements;
     };
+  }
+
+  addToCart(product:Product){
+    console.log(product.productName );
+
+    const theCartItem = new CartItem(product);
+
+    this.cartService.addToCart(theCartItem);
   }
 }
