@@ -39,7 +39,7 @@
 
 
                   <div class="col">
-                    <button (click)="increaseQuantity(tempCartItem)"  class="btn btn-primary btn-sm">
+                    <button (click)="increaseQuantity(tempCartItem)"  class="btn btn-primary  btn-sm">
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
@@ -60,6 +60,7 @@
               <p>Total Quantity: {{ totalQuantity }}</p>
               <p>Shiping:FREE</p>
               <p>Total Price {{ totalPrice|currency:'EUR' }}</p>
+              <button routerLink="/checkout" class="btn btn-primary btn-sm">Checkout</button>
             </td>
           </tr>
         </table>
