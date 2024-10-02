@@ -54,7 +54,7 @@ export class CheckoutComponent implements OnInit {
       })
     });
 
-    //add motnhs and years to credit card form
+    //add months and years to credit card form
     const currentMonth :number = new Date().getMonth()+1;
     this.farmerShopFormService.getMothForCreditCard(currentMonth).subscribe(
       data =>{
