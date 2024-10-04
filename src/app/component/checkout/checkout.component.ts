@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {FarmerShopFormService} from "../../services/farmer-shop-form.service";
+import {Country} from "../../common/country";
+import {State} from "../../common/state";
 
 @Component({
   selector: 'app-checkout',
@@ -16,6 +18,13 @@ export class CheckoutComponent implements OnInit {
 
   creditCardYears:number[]=[];
   creditCardMonths:number[]=[];
+
+  countries: Country[]=[];
+
+  shippingAddressStates:State[]=[];
+  billingAddressStates:State[]=[];
+
+
 
   constructor(private formBuilder: FormBuilder,
               private farmerShopFormService:FarmerShopFormService) {
@@ -62,6 +71,12 @@ export class CheckoutComponent implements OnInit {
       }
     )
 
+    this.farmerShopFormService.getCountries().subscribe(
+      data=>{
+        this.countries = data;
+      }
+    )
+
     this.farmerShopFormService.getYearsForCreditCard().subscribe(
       data =>{
         this.creditCardYears = data;
@@ -86,9 +101,12 @@ export class CheckoutComponent implements OnInit {
     if (event.target.checked) {
       this.checkOutFormGroup.controls['billingAddress']
         .setValue(this.checkOutFormGroup.controls['shippingAddress'].value);
+
+      this.billingAddressStates = this.shippingAddressStates;
     }
     else {
       this.checkOutFormGroup.controls['billingAddress'].reset();
+      this.billingAddressStates = [];
     }
 
   }
@@ -108,6 +126,31 @@ export class CheckoutComponent implements OnInit {
         this.creditCardMonths = data;
       }
     )
+
+  }
+
+  getStates(formGroupName: string) {
+
+    const  formGroup = this.checkOutFormGroup.get(formGroupName);
+
+    // @ts-ignore
+    const countryName = formGroup.value.country.name;
+    // @ts-ignore
+    const countryCode = formGroup.value.country.code;
+
+
+    this.farmerShopFormService.getStates(countryCode).subscribe(
+      data =>{
+        if (formGroupName == 'shippingAddress'){
+          this.shippingAddressStates = data;
+        }else {
+          this.billingAddressStates = data;
+        }
+
+        // @ts-ignore
+        formGroup?.get('state').setValue(data[0]);
+      }
+    );
 
   }
 }
